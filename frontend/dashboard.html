@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <div class="text-2xl font-bold">Aagan Sewa</div>
+    <div>
+      <span class="mr-4" id="greeting">Hello, User</span>
+      <button id="logoutBtn" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-200">
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="p-6">
+    <h1 class="text-3xl font-semibold mb-6">Dashboard</h1>
+
+    <!-- Services Section -->
+    <section>
+      <h2 class="text-xl font-medium mb-4">Available Services</h2>
+      <div id="card-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        
+        <!-- Electricity -->
+        <div class="bg-white p-4 rounded shadow hover:shadow-lg transition cursor-pointer service-card" data-service="electricity">
+          <h3 class="text-lg font-semibold mb-2">Electricity</h3>
+          <p class="text-gray-600 mb-4">Fix electrical issues in your home or office.</p>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            View Providers
+          </button>
+        </div>
+
+        <!-- Plumber -->
+        <div class="bg-white p-4 rounded shadow hover:shadow-lg transition cursor-pointer service-card" data-service="plumber">
+          <h3 class="text-lg font-semibold mb-2">Plumber</h3>
+          <p class="text-gray-600 mb-4">Repair leaks, pipes, and plumbing problems.</p>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            View Providers
+          </button>
+        </div>
+
+        <!-- Ambulance -->
+        <div class="bg-white p-4 rounded shadow hover:shadow-lg transition cursor-pointer service-card" data-service="ambulance">
+          <h3 class="text-lg font-semibold mb-2">Ambulance</h3>
+          <p class="text-gray-600 mb-4">Emergency medical transport available 24/7.</p>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            View Providers
+          </button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>

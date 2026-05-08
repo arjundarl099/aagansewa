@@ -1,0 +1,651 @@
+<!DOCTYPE html>   
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Providers – Aagan Sewa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css" crossorigin="anonymous">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --green: #16a34a;
+      --green-dark: red;
+      --green-bright: #3daa64;
+      --red-accent: #e63946;
+      --yellow: #ca8a04;
+      --yellow-light: #fef08a;
+      --bg: #f0fdf4;
+      --card: #ffffff;
+      --text: #1a2e1a;
+      --muted: #6b7280;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-top: 72px;
+    }
+
+    h1, h2, h3 { font-family: 'Sora', sans-serif; }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 70px;
+      background: rgba(26, 77, 46, 0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--green-bright);
+      box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 38px; height: 38px;
+      background: var(--red-accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 0 12px rgba(230, 57, 70, 0.5);
+      animation: pulse-red 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 12px rgba(230, 57, 70, 0.5); }
+      50%       { box-shadow: 0 0 24px rgba(230, 57, 70, 0.9); }
+    }
+
+    .brand-text {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-tagline {
+      font-size: 0.6rem;
+      color: var(--green-bright);
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 0; padding: 0;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .nav-links .btn-login {
+      background: var(--red-accent);
+      color: #fff;
+      padding: 0.5rem 1.25rem;
+    }
+
+    .nav-links .btn-login:hover {
+      background: #c1121f;
+    }
+
+    /* ── HERO BANNER ── */
+    .hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #14532d 100%);
+      color: white;
+      padding: 3.5rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.06) 0%, transparent 60%);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: .5rem;
+    }
+
+    .hero h1 span { color: var(--yellow-light); }
+
+    .hero p {
+      font-size: 1.1rem;
+      opacity: .85;
+    }
+
+    /* ── SERVICE BADGE ── */
+    .service-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.25);
+      padding: .4rem 1.1rem;
+      border-radius: 99px;
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── CONTROLS BAR ── */
+    .controls {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      position: sticky;
+      top: 70px;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .controls input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+      padding: .55rem 1rem .55rem 2.5rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      outline: none;
+      transition: border .2s;
+      background: #f9fafb;
+    }
+
+    .controls input:focus {
+      border-color: var(--green);
+      background: white;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: .8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    .filter-btn {
+      padding: .5rem 1.1rem;
+      border-radius: 8px;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--green);
+      background: #dcfce7;
+      color: var(--green-dark);
+      font-weight: 600;
+    }
+
+    /* ── PROVIDERS GRID ── */
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      transition: transform .25s, box-shadow .25s;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #e5e7eb;
+      animation: fadeUp .4s ease both;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-top {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+      object-fit: cover;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--green);
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .card-name h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #14532d;
+      margin: 0 0 .2rem;
+    }
+
+    .card-name .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: var(--green);
+      color: white;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+    }
+
+    .available-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      position: absolute;
+      top: 1rem; right: 1rem;
+      box-shadow: 0 0 0 3px rgba(34,197,94,.25);
+    }
+
+    .unavailable-dot {
+      background: #9ca3af;
+      box-shadow: none;
+    }
+
+    .card-body {
+      padding: 1.1rem 1.3rem;
+      flex: 1;
+    }
+
+    .stars { color: #f59e0b; font-size: .95rem; }
+
+    .rating-text {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-left: .3rem;
+    }
+
+    .info-row {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+      margin-top: .6rem;
+      font-size: .9rem;
+      color: #374151;
+    }
+
+    .info-row i {
+      color: var(--green);
+      width: 16px;
+      text-align: center;
+    }
+
+    .price {
+      font-weight: 700;
+      color: var(--green-dark);
+      font-size: 1rem;
+    }
+
+    .card-footer {
+      padding: 1rem 1.3rem;
+      border-top: 1px solid #f3f4f6;
+      display: flex;
+      gap: .7rem;
+    }
+
+    .btn-book {
+      flex: 1;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: .6rem;
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-book:hover { background: var(--green-dark); }
+
+    .btn-contact {
+      padding: .6rem .9rem;
+      border: 1.5px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: .95rem;
+    }
+
+    .btn-contact:hover { background: #dcfce7; }
+
+    /* ── BOOKING MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      width: min(520px, 95vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      animation: popIn .3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .modal h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #14532d;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal label {
+      display: block;
+      font-size: .9rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: .3rem;
+      margin-top: .9rem;
+    }
+
+    .modal input,
+    .modal select,
+    .modal textarea {
+      width: 100%;
+      padding: .6rem .9rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      outline: none;
+      transition: border .2s;
+    }
+
+    .modal input:focus,
+    .modal select:focus,
+    .modal textarea:focus { border-color: var(--green); }
+
+    .modal textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: .8rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-submit {
+      flex: 1;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: .75rem;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-submit:hover { background: var(--green-dark); }
+
+    .btn-cancel {
+      padding: .75rem 1.2rem;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-cancel:hover { background: #f3f4f6; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 300;
+      background: #14532d;
+      color: white;
+      padding: .9rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .4s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    .empty i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1f2937;
+      color: white;
+      padding: 2.5rem;
+      text-align: center;
+      font-size: .9rem;
+      opacity: .85;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="brand-icon">🚑</div>
+    <div>
+      <div class="brand-text">Aagan Sewa</div>
+      <div class="brand-tagline">Nepal Emergency Services</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="login.html" class="btn-login">Login</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero " >
+  <div class="service-badge">
+    <span id="hero-icon">⚡</span>
+    <span id="hero-service-label">Electrician</span>
+  </div>
+  <h1>Find the Best <span id="hero-title">Electricians</span></h1>
+  <p>Verified professionals near you — rated, reviewed &amp; ready to help</p>
+</section>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="search-wrap">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="searchInput" placeholder="Search by name or location…" oninput="filterProviders()" />
+  </div>
+  <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+  <button class="filter-btn" onclick="setFilter('available', this)">Available Now</button>
+  <button class="filter-btn" onclick="setFilter('top', this)">Top Rated</button>
+
+  <select id="sortSelect" onchange="filterProviders()"
+    style="padding:.5rem .9rem;border-radius:8px;border:1.5px solid #d1d5db;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;cursor:pointer;">
+    <option value="default">Sort: Default</option>
+    <option value="rating">Highest Rating</option>
+    <option value="price_asc">Price: Low → High</option>
+    <option value="price_desc">Price: High → Low</option>
+  </select>
+</div>
+
+<!-- Grid -->
+<div class="providers-grid" id="providersGrid"></div>
+
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <h2>
+      <i class="fa-solid fa-calendar-check" style="color:var(--green);margin-right:.5rem"></i>
+      Book Appointment
+    </h2>
+    <p id="modal-provider-name" style="color:#6b7280;margin-bottom:.5rem;font-size:.95rem"></p>
+
+    <label>Your Name</label>
+    <input type="text" id="f-name" placeholder="Full name" />
+
+    <label>Phone Number</label>
+    <input type="tel" id="f-phone" placeholder="+977 98XXXXXXXX" />
+
+    <label>Date</label>
+    <input type="date" id="f-date" />
+
+    <label>Time Slot</label>
+    <select id="f-time">
+      <option>08:00 AM – 10:00 AM</option>
+      <option>10:00 AM – 12:00 PM</option>
+      <option>12:00 PM – 02:00 PM</option>
+      <option>02:00 PM – 04:00 PM</option>
+      <option>04:00 PM – 06:00 PM</option>
+    </select>
+
+    <label>Address / Location</label>
+    <input type="text" id="f-address" placeholder="Your address" />
+
+    <label>Problem Description</label>
+    <textarea id="f-desc" placeholder="Briefly describe the issue…"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" onclick="submitBooking()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="toast-msg">Booking confirmed!</span>
+</div>
+
+<footer>
+  <p>© 2025 Aagan Sewa · Making life easier, one service at a time.</p>
+</footer>
+
+<script src="js/provider.js"></script>
+</body>
+</html>

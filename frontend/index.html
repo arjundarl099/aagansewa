@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aagan Sewa — Emergency Services Nepal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --green-deep: #1a4d2e;
+      --green-mid: #2d7a47;
+      --green-bright: #3daa64;
+      --red-accent: #e63946;
+      --cream: #fdf8f0;
+      --gold: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background-color: var(--cream);
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 70px;
+      background: rgba(26, 77, 46, 0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--green-bright);
+      box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 38px; height: 38px;
+      background: var(--red-accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 0 12px rgba(230, 57, 70, 0.5);
+      animation: pulse-red 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 12px rgba(230, 57, 70, 0.5); }
+      50% { box-shadow: 0 0 24px rgba(230, 57, 70, 0.9); }
+    }
+
+    .brand-text {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-tagline {
+      font-size: 0.6rem;
+      color: var(--green-bright);
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 0; padding: 0;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .nav-links .btn-login {
+      background: var(--red-accent);
+      color: #fff;
+      padding: 0.5rem 1.25rem;
+    }
+
+    .nav-links .btn-login:hover {
+      background: #c1121f;
+    }
+
+    /* ── HERO SWIPER ── */
+    .hero-section {
+      margin-top: 70px;
+      position: relative;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 88vh;
+    }
+
+    .swiper-slide {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: brightness(0.55);
+    }
+
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(26,77,46,0.85) 0%,
+        rgba(26,77,46,0.3) 50%,
+        transparent 100%
+      );
+      display: flex;
+      align-items: center;
+      padding: 4rem 6rem;
+    }
+
+    .slide-content {
+      max-width: 560px;
+      animation: slideIn 0.7s ease both;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide-badge {
+      display: inline-block;
+      background: var(--red-accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .slide-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+
+    .slide-desc {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.85);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .slide-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--green-bright);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+      letter-spacing: 0.03em;
+    }
+
+    .slide-cta:hover {
+      background: #fff;
+      color: var(--green-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Custom swiper nav */
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: #fff !important;
+      background: rgba(26,77,46,0.7);
+      border: 2px solid var(--green-bright);
+      width: 50px !important; height: 50px !important;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+      background: var(--green-bright);
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+      font-size: 1rem !important;
+      font-weight: 900;
+    }
+
+    .swiper-pagination-bullet {
+      background: rgba(255,255,255,0.6) !important;
+      width: 10px !important; height: 10px !important;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--green-bright) !important;
+      width: 28px !important;
+      border-radius: 5px !important;
+    }
+
+    /* Emergency strip */
+    .emergency-strip {
+      background: var(--red-accent);
+      color: #fff;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .emergency-number {
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: rgba(255,255,255,0.2);
+      padding: 0.1rem 0.7rem;
+      border-radius: 4px;
+    }
+
+    /* ── SERVICES SECTION ── */
+    .section {
+      padding: 5rem 5rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-bright);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+      color: #666;
+      font-weight: 300;
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--green-bright);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover {
+      border-color: var(--green-bright);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(45,122,71,0.15);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── STATS ── */
+    .stats-bar {
+      background: var(--green-deep);
+      padding: 3rem 5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-item {}
+
+    .stat-num {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--green-bright);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      counter-reset: steps;
+    }
+
+    .step-card {
+      position: relative;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 16px;
+      border-left: 4px solid var(--green-bright);
+    }
+
+    .step-num { 
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--green-bright);
+      opacity: 0.2;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-bg {
+      background: #f4fdf7;
+      padding: 5rem;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      position: relative;
+    }
+
+    .quote-mark {
+      font-size: 4rem;
+      color: var(--green-bright);
+      opacity: 0.2;
+      line-height: 0.8;
+      font-family: Georgia, serif;
+    }
+
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: #555;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .author-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--green-mid);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .author-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--green-deep);
+    }
+
+    .author-location {
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+      padding: 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .cta-title {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .cta-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: var(--green-deep);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0f2d1c;
+      color: rgba(255,255,255,0.6);
+      padding: 3rem 5rem 1.5rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .footer-brand-text {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-desc {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .footer-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-bright);
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0; margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--green-bright);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="brand-icon">🚑</div>
+    <div>
+      <div class="brand-text">Aagan Sewa</div>
+      <div class="brand-tagline">Nepal Emergency Services</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="login.html" class="btn-login">Login</a></li>
+  </ul>
+</nav>
+
+<!-- ── EMERGENCY STRIP ── -->
+<div style="margin-top:70px;" class="emergency-strip">
+  🚨 24/7 Emergency Helpline &nbsp;|&nbsp;
+  <span class="emergency-number">100</span>
+  &nbsp;|&nbsp;
+  Ambulance: <span class="emergency-number">102</span>
+  &nbsp;|&nbsp;
+  Fire: <span class="emergency-number">101</span>
+</div>
+
+<!-- ── HERO SWIPER ── -->
+<section class="hero-section">
+  <div class="swiper">
+    <div class="swiper-wrapper">
+
+      <!-- Slide 1 – Ambulance -->
+      <div class="swiper-slide">
+        <img src="./images/ambulance.jpg" alt="Ambulance Service">
+        <div class="slide-overlay">
+          <div class="slide-content">
+            <span class="slide-badge">🚑 Emergency Ready</span>
+            <h2 class="slide-title">Ambulance at Your<br>Doorstep in Minutes</h2>
+            <p class="slide-desc">Round-the-clock ambulance service across Nepalgunj and beyond. One call is all it takes.</p>
+            <a href="services.html" class="slide-cta">Book Now →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 – Doctor -->
+      <div class="swiper-slide">
+        <img src="./images/doctor.jpg" alt="Doctor Home Visit">
+        <div class="slide-overlay">
+          <div class="slide-content">
+            <span class="slide-badge">🩺 Home Visits</span>
+            <h2 class="slide-title">Certified Doctors,<br>Coming to You</h2>
+            <p class="slide-desc">Skip the queue. Our network of verified doctors provides consultations right at your home.</p>
+            <a href="services.html" class="slide-cta">Find a Doctor →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 – Electrician -->
+      <div class="swiper-slide">
+        <img src="./images/electrician.jpg" alt="Electrician Service">
+        <div class="slide-overlay">
+          <div class="slide-content">
+            <span class="slide-badge">⚡ Quick Repairs</span>
+            <h2 class="slide-title">Trusted Electricians,<br>Always Available</h2>
+            <p class="slide-desc">From faulty wiring to power outages — our skilled electricians are a call away, day or night.</p>
+            <a href="services.html" class="slide-cta">Request Service →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="section">
+  <div class="section-label">What We Offer</div>
+  <h2 class="section-title">Essential Services,<br>On Demand</h2>
+  <p class="section-sub">From medical emergencies to home repairs — Aagan Sewa connects you with trusted professionals fast.</p>
+
+  <div class="services-grid" data-service="ambulance">
+    <div class="service-card">
+      <span class="service-icon">🚑</span>
+      <div class="service-name">Ambulance</div>
+      <div class="service-desc">Emergency & non-emergency ambulance with trained paramedics available 24/7.</div>
+    </div>
+    <div class="service-card" data-service="doctor">
+      <span class="service-icon">🩺</span>
+      <div class="service-name">Doctor Home Visit</div>
+      <div class="service-desc">Certified doctors dispatched to your location for consultations and urgent care.</div>
+    </div>
+    <div class="service-card" data-service="electrician">
+      <span class="service-icon">⚡</span>
+      <div class="service-name">Electrician</div>
+      <div class="service-desc">Licensed electricians for wiring, repairs, and emergency power issues.</div>
+    </div>
+    <div class="service-card" data-service="plumber">
+      <span class="service-icon">🔧</span>
+      <div class="service-name">Plumber</div>
+      <div class="service-desc">Expert plumbers for leaks, pipe bursts, and drainage problems — fast response.</div>
+    </div>
+    <div class="service-card" data-service="fire-extinguiser">
+      <span class="service-icon">🔥</span>
+      <div class="service-name">Fire Emergency</div>
+      <div class="service-desc">Coordinate with fire brigades and safety professionals in a flash.</div>
+    </div>
+    <div class="service-card" data-service="security-guard">
+      <span class="service-icon">🛡️</span>
+      <div class="service-name">Security Guard</div>
+      <div class="service-desc">Trained security personnel for events, homes, and businesses on demand.</div>
+    </div>
+    <div class="service-card" data-service="construction">
+      <span class="service-icon">🏗️</span>
+      <div class="service-name">Construction</div>
+      <div class="service-desc">Connect with builders and contractors for urgent and planned repairs.</div>
+    </div>
+    <div class="service-card" data-service="cleaning">
+      <span class="service-icon">🧹</span>
+      <div class="service-name">Cleaning</div>
+      <div class="service-desc">Professional home and office cleaning services, scheduled or on demand.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how-it-works" class="section" style="background:#fff;">
+  <div class="section-label">Simple Process</div>
+  <h2 class="section-title">Help in 3 Easy Steps</h2>
+  <p class="section-sub">No complicated forms. No waiting. Just quick, reliable service at your fingertips.</p>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Choose a Service</div>
+      <div class="step-desc">Browse our categories and select the type of help you need right now.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">Share Your Location</div>
+      <div class="step-desc">Allow location access or enter your address so we dispatch the nearest professional.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Help Arrives</div>
+      <div class="step-desc">Track your professional in real-time and receive help in minutes, not hours.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Rate & Review</div>
+      <div class="step-desc">Share your feedback to help others and keep our quality standards high.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials-bg">
+  <div class="section-label">Voices from Nepal</div>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">What Our Users Say</h2>
+  <p class="section-sub">Real experiences from families and businesses across the valley.</p>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <div class="testimonial-text">My mother had a cardiac episode at midnight. Aagan Sewa had an ambulance at our door within 9 minutes. I cannot express enough gratitude.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">S</div>
+        <div>
+          <div class="author-name">Sushila Tamang</div>
+          <div class="author-location">Gaeshman Chowk</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <div class="testimonial-text">The electrician arrived within 20 minutes during a power failure at my shop. Professional, clean work, and transparent pricing. Will use again.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">R</div>
+        <div>
+          <div class="author-name">Ramesh Shrestha</div>
+          <div class="author-location">Dhomboji</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★☆</div>
+      <div class="quote-mark">"</div>
+      <div class="testimonial-text">Booked a plumber on Sunday evening — they showed up in under 30 minutes. The pipe burst was fixed properly. Great service for Bhaktapur too.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">B</div>
+        <div>               
+          <div class="author-name">Bijaya Maharjan</div>
+          <div class="author-location">Traffic Chowk</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->       
+<section class="cta-section">
+  <h2 class="cta-title">Ready When You Need Us Most</h2>
+  <p class="cta-sub">Join thousands of families and businesses across Nepal who trust Aagan Sewa.</p>
+  <div class="cta-buttons">
+    <a href="services.html" class="btn-primary">Explore All Services</a>
+    <a href="login.html" class="btn-outline">Create Free Account</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-text">🚑 Aagan Sewa</div>
+      <p class="footer-desc">Nepal's trusted platform for emergency and home services. Available 24 hours, 7 days a week across the Nepalgunj.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <ul class="footer-links">
+        <li><a href="#">Ambulance</a></li>
+        <li><a href="#">Doctor Visit</a></li>
+        <li><a href="#">Electrician</a></li>
+        <li><a href="#">Plumber</a></li>
+        <li><a href="#">Fire Emergency</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <ul class="footer-links">
+        <li><a href="#">📞 +977-1-XXXXXXX</a></li>
+        <li><a href="#">✉️ help@aagansewa.com.np</a></li>
+        <li><a href="#">📍 Nepalgunj, Nepal</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Aagan Sewa. All rights reserved.</span>
+    <span>Privacy Policy · Terms of Service</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<script>
+  const swiper = new Swiper('.swiper', {
+    direction: 'horizontal',
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    speed: 700,
+    effect: 'fade',
+    fadeEffect: { crossFade: true },
+  });
+</script>
+<script src="js/index.js"></script>
+</body>
+</html>
