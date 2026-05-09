@@ -7,6 +7,10 @@ const bookingSchema = new mongoose.Schema({
     ref: 'User',       // reference to the user who made the booking
     required: true
   },
+  service: {
+  type: String,
+  required: true
+  },
   provider: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Provider',   // reference to the service provider
@@ -22,7 +26,7 @@ const bookingSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true
+    
   },
   description: {
     type: String,

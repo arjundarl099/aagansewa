@@ -6,7 +6,7 @@ const errorResponse = require('../utils/errorResponse');
 exports.createBooking = async (req, res,next) => {
   try {
     console.log(req.body);
-    const { providerId, date, timeSlot, address, description } = req.body;
+    const { providerId, date, timeSlot, description,service } = req.body;
 
     // Assuming user ID is available via auth middleware
     const user = req.user.id;
@@ -22,25 +22,27 @@ exports.createBooking = async (req, res,next) => {
       provider: providerId,
       date, 
       time:timeSlot,
-      address,
+      service,
       description
     });
 
     res.status(201).json({ success: true, data: booking });
   } catch (err) {
-    next(new errorResponse('server Errror'),500)
+    console.log(err);
+    next(new errorResponse('server Errror',500));
   }
 };
 
 // Optional: Get all bookings for a user
-exports.getUserBookings = async (req, res) => {
+exports.getMe = async (req, res,next) => {
   try {
     const user = req.user.id;
-    const bookings = await Booking.find({ user }).populate('provider', 'name rating');
+    const bookings = await Booking.find({ user })
+    .populate('provider', 'name rating');
     res.status(200).json({ success: true, data: bookings });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(new errorResponse('server Error!', 500));
+    console.log(err);
   }
 };
 // Cancel a booking

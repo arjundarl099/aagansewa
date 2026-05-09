@@ -7,7 +7,7 @@ const serviceIcons = {
   ambulance:   { icon: '🚑', label: 'Ambulance Services' },
   doctor:      { icon: '🩺', label: 'Doctors' },
 };
-2
+
 // ── State ─────────────────────────────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
 const serviceKey = (params.get('service') || 'electrician').toLowerCase();
@@ -143,37 +143,32 @@ document.getElementById('bookingModal').addEventListener('click', e => {
 });
 
 async function submitBooking() {
-  const name    = document.getElementById('f-name').value.trim();
-  const phone   = document.getElementById('f-phone').value.trim();
-  const date    = document.getElementById('f-date').value;
-  const time    = document.getElementById('f-time').value;
-  const address = document.getElementById('f-address').value.trim();
-  const desc    = document.getElementById('f-desc').value.trim();
-  const token   = localStorage.getItem('token');
+  const date  = document.getElementById('f-date').value;
+  const time  = document.getElementById('f-time').value;
+  const desc  = document.getElementById('f-desc').value.trim();
+  const token = localStorage.getItem('token');
 
-  if (!name || !phone || !date || !address) {
-    alert('Please fill in all required fields.');
+  if (!date) {
+    alert('Please select a date.');
     return;
   }
 
   const bookingData = {
     providerId: bookingTarget,
-    customerName: name,
-    customerPhone: phone,
     date,
     timeSlot: time,
-    address,
     description: desc,
     service: serviceKey,
+    // name & phone come from req.user on the backend via JWT
   };
 
   try {
     const res = await fetch(`${API_BASE}/api/v1/booker`, {
       method: 'POST',
       headers: {
-         'Content-Type': 'application/json' ,
-         'Authorization': `Bearer ${token}`
-        },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify(bookingData),
     });
 
@@ -181,7 +176,8 @@ async function submitBooking() {
 
     closeModal();
     showToast('✅ Booking confirmed! We\'ll contact you shortly.');
-    ['f-name','f-phone','f-date','f-address','f-desc'].forEach(id => document.getElementById(id).value = '');
+    ['f-date', 'f-desc'].forEach(id => document.getElementById(id).value = '');
+    window.location.href='dashboard.html';
   } catch (err) {
     console.error(err);
     showToast('❌ Booking failed. Please try again.');
