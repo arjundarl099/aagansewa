@@ -8,7 +8,7 @@ const gotoProvider = (e) => {
   const card = e.target.closest('.service-card');
   if (!card) return;
   const service = card.dataset.service;
-  window.location.href = `providers.html?service=${service}`;
+  window.location.href = `provider.html?service=${service}`;
 };
 
 // ── Logout ────────────────────────────────────────────────────────────────

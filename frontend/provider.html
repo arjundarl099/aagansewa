@@ -231,6 +231,26 @@
       font-weight: 600;
     }
 
+    /* ── ADD PROVIDER BUTTON ── */
+    .btn-add-provider {
+      padding: .5rem 1.2rem;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      transition: background .2s;
+      margin-left: auto;
+    }
+
+    .btn-add-provider:hover { background: var(--green-dark); }
+
     /* ── PROVIDERS GRID ── */
     .providers-grid {
       display: grid;
@@ -393,6 +413,33 @@
 
     .btn-contact:hover { background: #dcfce7; }
 
+    /* ── EDIT / DELETE BUTTONS ON CARD ── */
+    .btn-edit {
+      padding: .6rem .9rem;
+      border: 1.5px solid #3b82f6;
+      background: transparent;
+      color: #3b82f6;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: .95rem;
+    }
+
+    .btn-edit:hover { background: #eff6ff; }
+
+    .btn-delete {
+      padding: .6rem .9rem;
+      border: 1.5px solid var(--red-accent);
+      background: transparent;
+      color: var(--red-accent);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: .95rem;
+    }
+
+    .btn-delete:hover { background: #fff1f2; }
+
     /* ── BOOKING MODAL ── */
     .modal-overlay {
       display: none;
@@ -496,6 +543,25 @@
 
     .btn-cancel:hover { background: #f3f4f6; }
 
+    /* ── DELETE CONFIRM MODAL ── */
+    .modal-delete h2 { color: var(--red-accent); }
+
+    .btn-confirm-delete {
+      flex: 1;
+      background: var(--red-accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: .75rem;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-confirm-delete:hover { background: #c1121f; }
+
     /* ── TOAST ── */
     .toast {
       position: fixed;
@@ -591,12 +657,17 @@
     <option value="price_asc">Price: Low → High</option>
     <option value="price_desc">Price: High → Low</option>
   </select>
+
+  <!-- ── ADD PROVIDER BUTTON ── -->
+  <button class="btn-add-provider" id="btn-add-provider" style="display:none" onclick="openProviderModal()">
+    <i class="fa-solid fa-plus"></i> Add Provider
+  </button>
 </div>
 
 <!-- Grid -->
 <div class="providers-grid" id="providersGrid"></div>
 
-<!-- Booking Modal -->
+<!-- ── BOOKING MODAL ── -->
 <div class="modal-overlay" id="bookingModal">
   <div class="modal">
     <h2>
@@ -623,6 +694,66 @@
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-submit" onclick="submitBooking()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD / EDIT PROVIDER MODAL ── -->
+<div class="modal-overlay" id="providerModal">
+  <div class="modal">
+    <h2 id="provider-modal-title">
+      <i class="fa-solid fa-user-plus" style="color:var(--green);margin-right:.5rem"></i>
+      Add Provider
+    </h2>
+
+    <label>Full Name</label>
+    <input type="text" id="p-name" placeholder="e.g. Ram Bahadur" />
+
+    <label>Phone</label>
+    <input type="tel" id="p-phone" placeholder="e.g. 9800000000" />
+
+    <label>Location</label>
+    <input type="text" id="p-location" placeholder="e.g. Kathmandu, Baneshwor" />
+
+    <label>Experience</label>
+    <input type="text" id="p-experience" placeholder="e.g. 5 years" />
+
+    <label>Price per Hour (Rs.)</label>
+    <input type="number" id="p-price" placeholder="e.g. 500" min="0" />
+
+    <label>Rating (0–5)</label>
+    <input type="number" id="p-rating" placeholder="e.g. 4.5" min="0" max="5" step="0.1" />
+
+    <label>Reviews Count</label>
+    <input type="number" id="p-reviews" placeholder="e.g. 32" min="0" />
+
+    <label>Availability</label>
+    <select id="p-available">
+      <option value="true">Available</option>
+      <option value="false">Unavailable</option>
+    </select>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeProviderModal()">Cancel</button>
+      <button class="btn-submit" id="provider-submit-btn" onclick="submitProvider()">Add Provider</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DELETE CONFIRM MODAL ── -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal modal-delete">
+    <h2>
+      <i class="fa-solid fa-triangle-exclamation" style="margin-right:.5rem"></i>
+      Delete Provider
+    </h2>
+    <p id="delete-provider-name" style="color:#6b7280;font-size:.95rem;margin-bottom:.5rem"></p>
+    <p style="font-size:.9rem;color:#374151;">This action cannot be undone. Are you sure you want to remove this provider?</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-confirm-delete" onclick="confirmDelete()">
+        <i class="fa-solid fa-trash"></i> Yes, Delete
+      </button>
     </div>
   </div>
 </div>

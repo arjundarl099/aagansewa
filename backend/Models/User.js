@@ -18,7 +18,7 @@ const userSchema=new mongoose.Schema({
       },
       role:{
         type:String,
-        enum:['user','publisher'],
+        enum:['user','publisher','admin'],
         default:'user',
       },
       password:{
@@ -40,7 +40,10 @@ userSchema.pre('save', async function(next){
     this.password = await bcrypt.hash(this.password,salt);
 })
 userSchema.methods.getSignedJwtToken = function(){
-  return jwt.sign({id:this.id},process.env.JWT_SECRET,{
+  return jwt.sign({
+    id:this.id,
+    role:this.role
+  },process.env.JWT_SECRET,{
     expiresIn:process.env.JWT_EXPIRE,
   });
 }

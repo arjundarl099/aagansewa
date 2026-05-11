@@ -10,14 +10,31 @@ const {
   deleteProvider,
 } = require('../Controllers/provider');
 
-// Public routes
-router.get('/',    getProviders);      // GET /api/providers?service=electrician
-router.get('/:id', getProviderById);  // GET /api/providers/:id
+const { protect, authorize } = require('../middleware/auth');
 
-// Admin-only routes (add your authMiddleware here later)
-router.post('/',                    createProvider);      // POST   /api/providers
-router.put('/:id',                  updateProvider);      // PUT    /api/providers/:id
-router.patch('/:id/availability',   toggleAvailability);  // PATCH  /api/providers/:id/availability
-router.delete('/:id',               deleteProvider);      // DELETE /api/providers/:id
+// ── Public routes (anyone can view providers) ─────────────────────────────
+router.get('/',     getProviders);      // GET /api/v1/providers?service=electrician
+router.get('/:id',  getProviderById);   // GET /api/v1/providers/:id
+
+// ── Admin-only routes ─────────────────────────────────────────────────────
+router.post('/',
+  protect, authorize('admin'),
+  createProvider
+);
+
+router.put('/:id',
+  protect, authorize('admin'),
+  updateProvider
+);
+
+router.patch('/:id/availability',
+  protect, authorize('admin'),
+  toggleAvailability
+);
+
+router.delete('/:id',
+  protect, authorize('admin'),
+  deleteProvider
+);
 
 module.exports = router;

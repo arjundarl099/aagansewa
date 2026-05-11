@@ -22,10 +22,10 @@ const pushDataToDatabase = async (e) => {
     });
 
     const data = await res.json();
-    console.log(data);
 
     if (data.success) {
       alert("Registration successful!");
+      window.location.href = 'login.html';
     } else {
       alert(data.message || "Registration failed");
     }

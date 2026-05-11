@@ -99,19 +99,27 @@ const updateProvider = async (req, res) => {
       return res.status(404).json({ message: 'Provider not found' });
     }
 
+    if (req.body.name && !req.body.initials) {
+      req.body.initials = req.body.name
+        .split(' ')
+        .map(word => word[0].toUpperCase())
+        .join('')
+        .slice(0, 2);
+    }
+
     const updatedProvider = await Provider.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true } // return updated doc + run schema validation
+      { returnDocument: 'after', runValidators: true }
     );
 
-    res.status(200).json({ message: 'Provider updated successfully', provider: updatedProvider });
+    // ← Must return updatedProvider directly, NOT { message, provider }
+    res.status(200).json(updatedProvider);
 
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
-
 // ─────────────────────────────────────────────────────────────────────────────
 // @desc    Toggle provider availability (available: true/false)
 // @route   PATCH /api/providers/:id/availability
