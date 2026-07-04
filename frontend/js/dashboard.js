@@ -1,7 +1,7 @@
 const API_BASE = 'http://localhost:8000';
 
-const container  = document.getElementById('card-container');
-const logOutBtn  = document.getElementById('logoutBtn');
+const container = document.getElementById('card-container');
+const logOutBtn = document.getElementById('logoutBtn');
 
 // ── Navigate to providers page ────────────────────────────────────────────
 const gotoProvider = (e) => {
@@ -43,10 +43,180 @@ const loadUser = async () => {
 
     greetUser.textContent = `Hi, ${data.data.name} 👋`;
 
+    // ── Role-based rendering ──────────────────────────────────────────────
+    // if (data.data.role === 'admin') {
+    //   showAdminPanel();   // reveal admin section
+    //   loadAllUsers();     // populate users table
+    // }
+
+    loadBookings();       // both admin & user see bookings
+
   } catch (err) {
     console.error(err);
     localStorage.removeItem('token');
     window.location.href = 'index.html';
+  }
+};
+
+// ── Show Admin Panel ──────────────────────────────────────────────────────
+const showAdminPanel = () => {
+  document.getElementById('admin-section')?.classList.remove('hidden');
+};
+
+// ── Load All Users (Admin) ────────────────────────────────────────────────
+const loadAllUsers = async () => {
+  const usersContainer = document.getElementById('users-container');
+  try {
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(`${API_BASE}/api/v1/auth/users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error('Failed to fetch users');
+    const data = await res.json();
+    const users = data.data;
+
+    if (!users || users.length === 0) {
+      usersContainer.innerHTML = `
+        <div class="text-center py-10 text-gray-400">
+          <i class="fa-solid fa-users-slash text-3xl mb-2 block"></i>
+          No users found.
+        </div>`;
+      return;
+    }
+
+    renderUsersTable(users);
+
+  } catch (err) {
+    console.error(err);
+    usersContainer.innerHTML = `
+      <div class="text-center py-10 text-red-400">
+        <i class="fa-solid fa-circle-exclamation text-3xl mb-2 block"></i>
+        Failed to load users. Please try again.
+      </div>`;
+  }
+};
+
+// ── Render Users Table ────────────────────────────────────────────────────
+const renderUsersTable = (users) => {
+  const usersContainer = document.getElementById('users-container');
+  usersContainer.innerHTML = `
+    <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr style="background:#f0fdf4;">
+            <th class="px-5 py-3 text-left font-semibold" style="color:#14532d;">#</th>
+            <th class="px-5 py-3 text-left font-semibold" style="color:#14532d;">Name</th>
+            <th class="px-5 py-3 text-left font-semibold" style="color:#14532d;">Email</th>
+            <th class="px-5 py-3 text-left font-semibold" style="color:#14532d;">Role</th>
+            <th class="px-5 py-3 text-left font-semibold" style="color:#14532d;">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          ${users.map((u, i) => `
+            <tr class="hover:bg-gray-50 transition" id="user-row-${u._id || u.id}">
+              <td class="px-5 py-3 text-gray-400">${i + 1}</td>
+              <td class="px-5 py-3 font-semibold text-gray-800">${u.name}</td>
+              <td class="px-5 py-3 text-gray-500">${u.email}</td>
+              <td class="px-5 py-3">
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full
+                  ${u.role === 'admin'
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'bg-green-100 text-green-700'}">
+                  ${capitalize(u.role)}
+                </span>
+              </td>
+              <td class="px-5 py-3">
+                <div class="flex gap-2">
+                  <button
+                    onclick="openEditModal('${u._id || u.id}', '${u.name}', '${u.email}', '${u.role}')"
+                    class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition">
+                    <i class="fa-solid fa-pen mr-1"></i>Edit
+                  </button>
+                  <button
+                    onclick="deleteUser('${u._id || u.id}')"
+                    class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition">
+                    <i class="fa-solid fa-trash mr-1"></i>Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+};
+
+// ── Delete User (Admin) ───────────────────────────────────────────────────
+const deleteUser = async (userId) => {
+  if (!confirm('Are you sure you want to delete this user? This cannot be undone.')) return;
+  try {
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(`${API_BASE}/api/v1/auth/users/${userId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!res.ok) throw new Error('Delete failed');
+
+    // Remove the row from the table without a full reload
+    document.getElementById(`user-row-${userId}`)?.remove();
+
+  } catch (err) {
+    console.error(err);
+    alert('Failed to delete user. Please try again.');
+  }
+};
+
+// ── Open Edit Modal ───────────────────────────────────────────────────────
+const openEditModal = (id, name, email, role) => {
+  document.getElementById('edit-user-id').value    = id;
+  document.getElementById('edit-user-name').value  = name;
+  document.getElementById('edit-user-email').value = email;
+  document.getElementById('edit-user-role').value  = role;
+  document.getElementById('edit-modal').classList.remove('hidden');
+};
+
+const closeEditModal = () => {
+  document.getElementById('edit-modal').classList.add('hidden');
+};
+
+// ── Save Edited User (Admin) ──────────────────────────────────────────────
+const saveEditUser = async () => {
+  const id    = document.getElementById('edit-user-id').value;
+  const name  = document.getElementById('edit-user-name').value.trim();
+  const email = document.getElementById('edit-user-email').value.trim();
+  const role  = document.getElementById('edit-user-role').value;
+
+  if (!name || !email) return alert('Name and email are required.');
+
+  try {
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(`${API_BASE}/api/v1/auth/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ name, email, role })
+    });
+
+    if (!res.ok) throw new Error('Update failed');
+
+    closeEditModal();
+    loadAllUsers();   // refresh the table
+
+  } catch (err) {
+    console.error(err);
+    alert('Failed to update user. Please try again.');
   }
 };
 
@@ -160,7 +330,7 @@ const loadBookings = async () => {
       </div>
     `).join('');
 
-    // Attach cancel button listeners after rendering
+    // Attach cancel listeners after rendering
     bookingsContainer.querySelectorAll('.cancel-btn').forEach(btn => {
       btn.addEventListener('click', () => cancelBooking(btn.dataset.id, btn));
     });
@@ -203,6 +373,5 @@ function formatDate(dateStr) {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  loadUser();
-  loadBookings();
+  loadUser();   // role check + everything else happens inside
 });

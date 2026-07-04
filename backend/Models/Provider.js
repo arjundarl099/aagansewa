@@ -2,17 +2,39 @@ const mongoose = require('mongoose');
 
 const ProviderSchema = new mongoose.Schema(
   {
+    // NEW — links this listing to the User account (role: 'provider') that manages it.
+    // sparse:true lets many old/admin-created providers exist with no linked user.
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      unique: true,
+      sparse: true,
+    },
+
     name: {
       type: String,
       required: [true, 'Provider name is required'],
       trim: true,
     },
 
-    service: {
+    providerType: {
       type: String,
-      required: [true, 'Service type is required'],
-      enum: ['electrician', 'plumber', 'ambulance', 'doctor'],
+      required: [true, 'Provider type is required'],
+      enum: [
+        'hospital',
+        'clinic',
+        'electrician',
+        'plumber',
+        'ambulance',
+        'other',
+      ],
       lowercase: true,
+    },
+
+    description: {
+      type: String,
+      default: '',
+      trim: true,
     },
 
     location: {
@@ -27,15 +49,22 @@ const ProviderSchema = new mongoose.Schema(
       trim: true,
     },
 
-    experience: {
-      type: String, // e.g. "8 yrs"
-      default: 'N/A',
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      default: '',
     },
 
-    price: {
-      type: Number, // price per hour in Rs.
-      required: [true, 'Price is required'],
-      min: 0,
+    website: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+
+    image: {
+      type: String,
+      default: '',
     },
 
     rating: {
@@ -50,17 +79,29 @@ const ProviderSchema = new mongoose.Schema(
       default: 0,
     },
 
-    available: {
+    verified: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+
+    emergencyAvailable: {
+      type: Boolean,
+      default: false,
     },
 
     initials: {
       type: String,
       trim: true,
     },
+
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
-  { timestamps: true } 
+  {
+    timestamps: true,
+  }
 );
 
 module.exports = mongoose.model('Provider', ProviderSchema);

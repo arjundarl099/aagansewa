@@ -1,40 +1,45 @@
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 
 const {
   getProviders,
   getProviderById,
+  getMyProvider,
+  updateMyProvider,
   createProvider,
   updateProvider,
   toggleAvailability,
+  toggleVerified,
   deleteProvider,
 } = require('../Controllers/provider');
 
-const { protect, authorize } = require('../middleware/auth');
+const { protect ,authorize} = require('../middleware/auth');
 
-// ── Public routes (anyone can view providers) ─────────────────────────────
-router.get('/',     getProviders);      // GET /api/v1/providers?service=electrician
-router.get('/:id',  getProviderById);   // GET /api/v1/providers/:id
+// @route   GET /api/providers
+router.get('/', getProviders);
 
-// ── Admin-only routes ─────────────────────────────────────────────────────
-router.post('/',
-  protect, authorize('admin'),
-  createProvider
-);
+// @route   GET /api/providers/me  — must come before /:id or "me" gets treated as an ID
+router.get('/me', protect, authorize('provider'), getMyProvider);
 
-router.put('/:id',
-  protect, authorize('admin'),
-  updateProvider
-);
+// @route   PUT /api/providers/me
+router.put('/me', protect, authorize('provider'), updateMyProvider);
 
-router.patch('/:id/availability',
-  protect, authorize('admin'),
-  toggleAvailability
-);
+// @route   GET /api/providers/:id
+router.get('/:id', getProviderById);
 
-router.delete('/:id',
-  protect, authorize('admin'),
-  deleteProvider
-);
+// @route   POST /api/providers
+router.post('/', protect, authorize('admin'), createProvider);
+
+// @route   PUT /api/providers/:id
+router.put('/:id', protect, authorize('admin'), updateProvider);
+
+// @route   PATCH /api/providers/:id/availability
+router.patch('/:id/availability', protect, authorize('admin'), toggleAvailability);
+
+// @route   PATCH /api/providers/:id/verify
+router.patch('/:id/verify', protect, authorize('admin'), toggleVerified);
+
+// @route   DELETE /api/providers/:id
+router.delete('/:id', protect, authorize('admin'), deleteProvider);
 
 module.exports = router;

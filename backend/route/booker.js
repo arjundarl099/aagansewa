@@ -1,19 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const {
   createBooking,
   getMe,
   getSingleBooking,
-  cancelBooking
+  cancelBooking,
+  getAllBookings,
 } = require('../controllers/booker');
 
 router
-.route('/')
-.post(protect,createBooking)
-.get(protect,getMe);
+  .route('/')
+  .post(protect, createBooking)
+  .get(protect, getMe);
 
-router.get('/:id',        protect, getSingleBooking);
+// IMPORTANT: /all must come BEFORE /:id, otherwise Express matches "all"
+// as the :id param and getSingleBooking tries to cast "all" to an ObjectId.
+router.get('/all', protect, authorize('admin'), getAllBookings);
+
+router.get('/:id', protect, getSingleBooking);
 router.patch('/:id/cancel', protect, cancelBooking);
 
 module.exports = router;

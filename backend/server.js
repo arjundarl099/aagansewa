@@ -21,10 +21,12 @@ const authrouter = require('./route/auth');
 const servicesRouter = require('./route/services');
 const providerRoutes = require('./route/provider');
 const bookerRoutes = require('./route/booker');
+const userRoutes = require('./route/userRoutes');
 app.use('/api/v1/auth',authrouter);
 app.use('/api/v1/services',servicesRouter);
 app.use('/api/v1/providers', providerRoutes);
 app.use('/api/v1/booker', bookerRoutes);
+app.use('/api/v1/auth/users', userRoutes);
 app.use(errorHandler);
 const PORT = process.env.PORT || 8000;
 app.listen(PORT,()=>{

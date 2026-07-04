@@ -1,32 +1,84 @@
 const mongoose = require('mongoose');
 
-const serviceSchema = new mongoose.Schema({
+const ServiceSchema = new mongoose.Schema(
+  {
+    provider: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Provider',
+      required: [true, 'Provider is required'],
+    },
+
+    category: {
+      type: String,
+      required: true,
+      enum: [
+        'doctor',
+        'ambulance',
+        'electrician',
+        'plumber',
+      ],
+      lowercase: true,
+    },
+
     name: {
-    type: String,
-    required: [true,'please provide name of the service'],
-    trim: true
-  },
+      type: String,
+      required: [true, 'Service name is required'],
+      trim: true,
+    },
 
-  slug: {
-    type: String,
-    unique: true,
-    lowercase: true
-  },
+    description: {
+      type: String,
+      default: '',
+    },
 
-  icon: {
-    type: String, // emoji or icon class
-    default: "🔧"
-  },
+    price: {
+      type: Number,
+      required: [true, 'Price is required'],
+      min: 0,
+    },
 
-  description: {
-    type: String,
-    required: [true,'please provide description of the service']
+    experience: {
+      type: String,
+      default: 'N/A',
+    },
+
+    duration: {
+      type: Number, // in minutes
+      default: 60,
+    },
+
+    available: {
+      type: Boolean,
+      default: true,
+    },
+
+    capacity: {
+     type: Number,
+    required: [true, 'Service capacity is required'],
+    default: 1,
+    min: 1,
+    },
+
+    rating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
+
+    reviews: {
+      type: Number,
+      default: 0,
+    },
+
+    icon: {
+      type: String,
+      default: '🔧',
+    },
+  },
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
-
-
-
-module.exports = mongoose.model('Services',serviceSchema);
+module.exports = mongoose.model('Services', ServiceSchema);

@@ -3,13 +3,13 @@ const registerForm = document.querySelector('#registerForm');
 const pushDataToDatabase = async (e) => {
   e.preventDefault();
 
-  const username = document.getElementById('username').value;
-  const email = document.getElementById('email').value;
+  const username = document.getElementById('username').value.trim();
+  const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const role = document.getElementById('role').value;
 
   if (!username || !email || !password) {
-    return alert("Please enter username, email, and password");
+    return alert('Please enter username, email, and password');
   }
 
   try {
@@ -21,18 +21,20 @@ const pushDataToDatabase = async (e) => {
       body: JSON.stringify({ name: username, email, password, role }),
     });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
 
-    if (data.success) {
-      alert("Registration successful!");
+    // Check the HTTP status too, not just data.success — a validation error
+    // or server error may not include a `success` field at all.
+    if (res.ok && data.success) {
+      alert('Registration successful!');
       window.location.href = 'login.html';
     } else {
-      alert(data.message || "Registration failed");
+      alert(data.message || `Registration failed (${res.status})`);
     }
 
   } catch (error) {
     console.error(error);
-    alert("Error connecting to server");
+    alert('Error connecting to server');
   }
 };
 

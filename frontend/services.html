@@ -1,256 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Services</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --green-deep: #1a4d2e;
-      --green-mid: #2d7a47;
-      --green-bright: #3daa64;
-      --red-accent: #e63946;
-      --cream: #fdf8f0;
-      --gold: #d4a017;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      font-family: 'Sora', sans-serif;
-      background-color: var(--cream);
-      margin: 0;
-      overflow-x: hidden;
-    }
-
-    /* ── NAVBAR ── */
-    .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      height: 70px;
-      background: rgba(26, 77, 46, 0.97);
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid var(--green-bright);
-      box-shadow: 0 2px 30px rgba(0,0,0,0.3);
-    }
-
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-    }
-
-    .brand-icon {
-      width: 38px; height: 38px;
-      background: var(--red-accent);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      box-shadow: 0 0 12px rgba(230, 57, 70, 0.5);
-      animation: pulse-red 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-red {
-      0%, 100% { box-shadow: 0 0 12px rgba(230, 57, 70, 0.5); }
-      50% { box-shadow: 0 0 24px rgba(230, 57, 70, 0.9); }
-    }
-
-    .brand-text {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 0.02em;
-    }
-
-    .brand-tagline {
-      font-size: 0.6rem;
-      color: var(--green-bright);
-      font-weight: 300;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-      list-style: none;
-      margin: 0; padding: 0;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .nav-links a:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
-
-    .nav-links .btn-login {
-      background: var(--red-accent);
-      color: #fff;
-      padding: 0.5rem 1.25rem;
-    }
-
-    .nav-links .btn-login:hover {
-      background: #c1121f;
-    }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Provider – Aagan Sewa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css" crossorigin="anonymous">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['DM Sans', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace'],
+        },
+        colors: {
+          pine: { DEFAULT: '#0f3d2e', light: '#155c44', pale: '#e9f3ee' },
+          marigold: { DEFAULT: '#e3a72e', dark: '#c48a1a' },
+          crimson: { DEFAULT: '#c81d25', dark: '#9e1218' },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .seal { transform: rotate(-8deg); }
+  .card-lift { transition: transform .25s ease, box-shadow .25s ease; }
+  .card-lift:hover { transform: translateY(-6px); }
+</style>
 </head>
-<body class="pt-16">
+<body class="font-body bg-pine-pale text-[#12261d] m-0">
 
-<nav class="navbar">
-  <a href="index.html" class="navbar-brand">
-    <div class="brand-icon">🚑</div>
+<!-- Navbar -->
+<nav class="flex items-center justify-between px-6 md:px-10 h-[74px] bg-pine sticky top-0 z-50">
+  <a href="index.html" class="flex items-center gap-3 no-underline">
+    <div class="w-10 h-10 bg-crimson rounded-lg flex items-center justify-center text-xl shadow-[0_0_16px_rgba(200,29,37,0.55)]">🚑</div>
     <div>
-      <div class="brand-text">Aagan Sewa</div>
-      <div class="brand-tagline">Nepal Emergency Services</div>
+      <div class="text-xl font-display font-semibold text-white tracking-tight">Aagan Sewa</div>
+      <div class="text-[0.62rem] font-mono text-marigold tracking-[0.2em] uppercase">Nepal Emergency &amp; Home Services</div>
     </div>
   </a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="login.html" class="btn-login">Login</a></li>
+  <ul class="hidden md:flex gap-1 list-none m-0 p-0 items-center">
+    <li><a href="index.html" class="text-white/75 no-underline text-sm font-medium px-4 py-2 rounded-md hover:bg-white/10 hover:text-white transition">Home</a></li>
+    <li><a href="provider.html" class="text-white/75 no-underline text-sm font-medium px-4 py-2 rounded-md hover:bg-white/10 hover:text-white transition">Providers</a></li>
+    <li id="nav-login-item"><a href="login.html" class="ml-2 bg-crimson text-white no-underline text-sm font-semibold px-5 py-2.5 rounded-md hover:bg-crimson-dark transition">Log in</a></li>
+    <li id="nav-dashboard-item" class="hidden"><a href="dashboard.html" class="ml-2 bg-crimson text-white no-underline text-sm font-semibold px-5 py-2.5 rounded-md hover:bg-crimson-dark transition">Dashboard</a></li>
   </ul>
 </nav>
 
-<!-- main section -->
-<main>
-<section class="bg-gray-600 flex flex-col justify-center items-center h-80">
-<h1 class="text-5xl text-white font-semibold mb-6">Our <span class="text-yellow-700">Premium Services</span></h1>
-<span class="text-3xl text-white">Discover wide range of service Designed to make yours life easier and confortable</span>
-</section>
-
-<section>
-  <div class="m-10">
-    <h1 class="text-center text-4xl font-bold mb-6">Wht we <span class="text-blue-700">offer</span></h1>
-    <p class="text-center text-gray-700 text-3xl font-semibold">Browse through our diverse range of services Designed to meet all yours needs</p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto p-6 mt-20">
-
-  <!-- Electrician -->
-  <a href="provider.html?service=electrician" class="flex flex-col items-center bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
-    <div class="text-4xl mb-4">⚡</div>
-    <h2 class="text-xl font-semibold text-gray-800">Electrician</h2>
-    <p class="text-gray-500 text-center mt-2">
-      Professional electrical repair and installation services.
-    </p>
-  </a>
-
-  <!-- Plumber -->
-  <a href="provider.html?service=plumber" class="flex flex-col items-center bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
-    <div class="text-4xl mb-4">🚿</div>
-    <h2 class="text-xl font-semibold text-gray-800">Plumber</h2>
-    <p class="text-gray-500 text-center mt-2">
-      Fix leaks, pipes, and all plumbing-related issues.
-    </p>
-  </a>
-
-  <!-- Ambulance -->
-  <a href="provider.html?service=ambulance" class="flex flex-col items-center bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
-    <div class="text-4xl mb-4">🚑</div>
-    <h2 class="text-xl font-semibold text-gray-800">Ambulance</h2>
-    <p class="text-gray-500 text-center mt-2">
-      Emergency medical transportation available 24/7.
-    </p>
-  </a>
-  <!-- doctor -->
-  <a href="provider.html?service=doctor" class="flex flex-col items-center bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
-    <div class="text-4xl mb-4">🩺</div>
-    <h2 class="text-xl font-semibold text-gray-800">doctor</h2>
-    <p class="text-gray-500 text-center mt-2">
-      Professional medical consultation and healthcare services.
-    </p>
-  </a>
-</div>
-</div>
-</section>
-
-<section class="bg-black p-6 h-90">
-  <div class="flex flex-col gap-10 items-center justify-center text-white p-10">
-    <h1 class="text-5xl font-bold">Need Help Choosing a service ?</h1>
-    <p class="text-3xl font-semibold">Our team is ready to help you find the perfect solution for yours need </p>
-   <a href="contact.html" class="w-full text-center"> <button class="p-4 text-xl w-1/4 font-semibold bg-yellow-500 rounded-lg shadow hover:bg-yellow-700 transition">Contact Us</button></a>
-
+<!-- Provider header -->
+<section id="provider-header" class="bg-pine text-white px-6 md:px-10 pt-14 pb-10 relative overflow-hidden">
+  <div class="max-w-3xl mx-auto text-center relative z-10">
+    <p class="text-white/50 font-mono text-xs">Loading provider…</p>
   </div>
 </section>
-</main>
 
-<footer class="bg-gray-700  p-10">
-  <div class="flex flex-col gap-6 p-6 border-b-2">
-    <h1 class="text-5xl text-white">Aagan Sewa</h1>
-    <span class="text-3xl">Our Rating:<i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i></span>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6 m-10 border-b-2">
-    <div>
-      <h1 class="text-5xl mb-4">Our Services</h1>
-      <ul type="none" class="flex flex-col gap-4 text-2xl text-white font-bold">
-        <li><i class="fa-solid fa-truck-medical"></i>Ambulance Secvices</li>
-        <li><i class="fa-solid fa-wrench"></i>Plumber Secvices</li>
-        <li><i class="fa-solid fa-bolt"></i>Electrical Secvices</li>
-        <li><i class="fa-solid fa-hospital"></i>Doctors Secvices</li>
-      </ul>
-    </div>
-    <div>
-      <h1 class="text-5xl mb-4">Contact us</h1>
-      <ul type="none" class="flex flex-col gap-4 text-2xl text-white font-bold">
-        <li><i class="fa-solid fa-phone"></i><i class="fa-solid fa-plus"></i>9812466237</li>
-        <li><i class="fa-solid fa-envelope"></i>aaganSewa@gmail.com</li>
-      </ul>
-    </div>
-    <div>
-  <h1 class="text-5xl mb-4 text-white font-bold">Follow Us</h1>
-  <ul class="flex flex-col gap-4 text-2xl text-white font-bold list-none">
-    <li>
-      <a href="#" class="hover:text-blue-500 transition cursor-pointer">
-        <i class="fa-brands fa-facebook"></i> Facebook
-      </a>
-    </li>
-    <li>
-      <a href="#" class="hover:text-sky-400 transition cursor-pointer">
-        <i class="fa-brands fa-twitter"></i> Twitter
-      </a>
-    </li>
-    <li>
-      <a href="#" class="hover:text-pink-500 transition cursor-pointer">
-        <i class="fa-brands fa-instagram"></i> Instagram
-      </a>
-    </li>
-  </ul>
+<!-- Back link -->
+<div class="max-w-6xl mx-auto px-6 md:px-10 pt-6">
+  <a href="provider.html" class="inline-flex items-center gap-2 text-sm font-medium text-pine hover:text-pine-light no-underline">
+    <i class="fa-solid fa-arrow-left text-xs"></i> Back to all providers
+  </a>
 </div>
-    <div>
-      <h1 class="text-5xl mb-4">Payment Method</h1>
-      <ul type="none" class="flex flex-col gap-4 text-2xl text-white font-bold">
-        <li><i class="fa-brands fa-cc-visa"></i></li>
-        <li><i class="fa-brands fa-paypal"></i></li>
-        <li><i class="fa-brands fa-apple-pay"></i></li>
-      </ul>
-    </div>
 
-  </div>
-  
+<!-- Services Grid -->
+<div id="services-grid" class="max-w-6xl mx-auto px-6 md:px-10 pt-6 pb-20 grid grid-cols-[repeat(auto-fill,minmax(310px,1fr))] gap-6">
+  <p class="col-span-full text-center text-pine/50 font-mono text-sm py-10">Loading services…</p>
+</div>
+
+<!-- Footer -->
+<footer class="bg-pine text-white/60 text-center px-10 py-10 text-sm">
+  <p class="font-mono text-xs tracking-wide">© 2025 AAGAN SEWA · MAKING LIFE EASIER, ONE SERVICE AT A TIME.</p>
 </footer>
 
+<!-- Booking Modal -->
+<div id="bookingModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 px-4 open:flex" style="display:none;">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-display font-semibold text-xl text-pine">Book this service</h3>
+      <button onclick="closeBookingModal()" class="text-pine/40 hover:text-pine text-xl leading-none">&times;</button>
+    </div>
+    <p id="modal-provider-name" class="text-sm text-pine/60 mb-4 font-mono"></p>
+
+    <label class="block text-sm font-medium text-[#12261d]/80 mb-1">Date</label>
+    <input id="f-date" type="date" class="w-full border border-pine/15 rounded-md px-3 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-pine/30" />
+
+    <label class="block text-sm font-medium text-[#12261d]/80 mb-1">Preferred time</label>
+    <input id="f-time" type="time" class="w-full border border-pine/15 rounded-md px-3 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-pine/30" />
+
+    <label class="block text-sm font-medium text-[#12261d]/80 mb-1">Notes (optional)</label>
+    <textarea id="f-desc" rows="3" class="w-full border border-pine/15 rounded-md px-3 py-2 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-pine/30" placeholder="Anything the provider should know..."></textarea>
+
+    <div class="flex gap-3">
+      <button onclick="closeBookingModal()" class="flex-1 border border-pine/15 text-pine text-sm font-semibold py-2.5 rounded-md hover:bg-pine-pale transition">Cancel</button>
+      <button onclick="submitBooking()" class="flex-1 bg-crimson hover:bg-crimson-dark text-white text-sm font-semibold py-2.5 rounded-md transition">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-pine text-white text-sm font-medium px-5 py-3 rounded-lg shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-[110]">
+  <span id="toast-msg"></span>
+</div>
+
+<style>
+  #bookingModal.open { display: flex !important; }
+  #toast.show { opacity: 1; }
+</style>
 
 <script src="js/service.js"></script>
+<script>
+  (function initAuthNav() {
+    const token = localStorage.getItem('token');
+    const loginItem = document.getElementById('nav-login-item');
+    const dashboardItem = document.getElementById('nav-dashboard-item');
+
+    if (!loginItem || !dashboardItem) return;
+
+    if (token) {
+      loginItem.classList.add('hidden');
+      dashboardItem.classList.remove('hidden');
+    } else {
+      loginItem.classList.remove('hidden');
+      dashboardItem.classList.add('hidden');
+    }
+  })();
+</script>
 </body>
 </html>

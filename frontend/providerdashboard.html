@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Provider Dashboard – Aagan Sewa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css" crossorigin="anonymous">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['DM Sans', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace'],
+        },
+        colors: {
+          pine: { DEFAULT: '#0f3d2e', light: '#155c44', pale: '#e9f3ee' },
+          marigold: { DEFAULT: '#e3a72e', dark: '#c48a1a' },
+          crimson: { DEFAULT: '#c81d25', dark: '#9e1218' },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  #toast.show { opacity: 1; }
+  #serviceModal.open { display: flex !important; }
+</style>
+</head>
+<body class="font-body bg-pine-pale text-[#12261d] m-0">
+
+<!-- Navbar -->
+<nav class="flex items-center justify-between px-6 md:px-10 h-[74px] bg-pine sticky top-0 z-50">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 bg-crimson rounded-lg flex items-center justify-center text-xl">🚑</div>
+    <div>
+      <div class="text-xl font-display font-semibold text-white tracking-tight">Aagan Sewa</div>
+      <div class="text-[0.62rem] font-mono text-marigold tracking-[0.2em] uppercase">Provider Dashboard</div>
+    </div>
+  </div>
+  <button onclick="logout()" class="text-white/75 text-sm font-medium px-4 py-2 rounded-md hover:bg-white/10 hover:text-white transition">
+    <i class="fa-solid fa-right-from-bracket mr-1"></i> Log out
+  </button>
+</nav>
+
+<div class="max-w-6xl mx-auto px-6 md:px-10 py-8 space-y-8">
+
+  <!-- Pending review banner -->
+  <div id="review-banner" class="hidden bg-marigold/15 border border-marigold/40 text-marigold-dark text-sm font-medium px-5 py-3 rounded-lg">
+    <i class="fa-solid fa-circle-info mr-1"></i> Your listing is awaiting admin verification and won't appear publicly until then.
+  </div>
+
+  <!-- My Listing -->
+  <section class="bg-white rounded-2xl border border-pine/10 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-display font-semibold text-xl text-pine">My Listing</h2>
+      <div id="listing-badges" class="flex gap-2"></div>
+    </div>
+    <form id="listing-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Business name</label>
+        <input id="l-name" type="text" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Phone</label>
+        <input id="l-phone" type="text" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Location</label>
+        <input id="l-location" type="text" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Email</label>
+        <input id="l-email" type="email" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-1">Description</label>
+        <textarea id="l-description" rows="3" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm"></textarea>
+      </div>
+      <div class="md:col-span-2">
+        <button type="submit" class="bg-crimson hover:bg-crimson-dark text-white text-sm font-semibold px-5 py-2.5 rounded-md transition">Save Changes</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- My Services -->
+  <section class="bg-white rounded-2xl border border-pine/10 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-display font-semibold text-xl text-pine">My Services</h2>
+      <button onclick="openServiceModal()" class="bg-pine text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-pine-light transition flex items-center gap-2">
+        <i class="fa-solid fa-plus"></i> Add Service
+      </button>
+    </div>
+    <div id="services-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <p class="text-pine/40 text-sm">Loading…</p>
+    </div>
+  </section>
+
+  <!-- Booking Requests -->
+  <section class="bg-white rounded-2xl border border-pine/10 shadow-sm overflow-x-auto">
+    <div class="p-6 pb-0">
+      <h2 class="font-display font-semibold text-xl text-pine">Booking Requests</h2>
+    </div>
+    <table class="w-full text-sm mt-4">
+      <thead>
+        <tr class="text-left border-b border-pine/10 text-pine/60 font-mono text-xs uppercase">
+          <th class="px-6 py-3">Customer</th>
+          <th class="px-6 py-3">Service</th>
+          <th class="px-6 py-3">Date</th>
+          <th class="px-6 py-3">Time</th>
+          <th class="px-6 py-3">Notes</th>
+          <th class="px-6 py-3">Status</th>
+          <th class="px-6 py-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="bookings-tbody">
+        <tr><td colspan="7" class="px-6 py-8 text-center text-pine/40">Loading…</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<!-- Add/Edit Service Modal -->
+<div id="serviceModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 px-4" style="display:none;">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h3 id="service-modal-title" class="font-display font-semibold text-xl text-pine">Add Service</h3>
+      <button onclick="closeServiceModal()" class="text-pine/40 hover:text-pine text-xl leading-none">&times;</button>
+    </div>
+    <div class="space-y-3">
+      <div>
+        <label class="block text-sm font-medium mb-1">Category</label>
+        <input id="s-category" type="text" placeholder="e.g. electrician, plumber, doctor" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Service name</label>
+        <input id="s-name" type="text" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Description</label>
+        <textarea id="s-description" rows="2" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Price (Rs.)</label>
+          <input id="s-price" type="number" min="0" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Capacity</label>
+          <input id="s-capacity" type="number" min="0" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Experience</label>
+          <input id="s-experience" type="text" placeholder="e.g. 5 years" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Duration</label>
+          <input id="s-duration" type="text" placeholder="e.g. 1-2 hrs" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Icon (emoji)</label>
+        <input id="s-icon" type="text" placeholder="🔧" class="w-full border border-pine/15 rounded-md px-3 py-2 text-sm" />
+      </div>
+    </div>
+    <div class="flex gap-3 mt-5">
+      <button onclick="closeServiceModal()" class="flex-1 border border-pine/15 text-pine text-sm font-semibold py-2.5 rounded-md hover:bg-pine-pale transition">Cancel</button>
+      <button id="service-submit-btn" onclick="submitService()" class="flex-1 bg-crimson hover:bg-crimson-dark text-white text-sm font-semibold py-2.5 rounded-md transition">Add Service</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-pine text-white text-sm font-medium px-5 py-3 rounded-lg shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-[110]">
+  <span id="toast-msg"></span>
+</div>
+
+<script src="js/providerdash.js"></script>
+</body>
+</html>

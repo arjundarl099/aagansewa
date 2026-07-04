@@ -1,75 +1,165 @@
 // controllers/bookingController.js
 const Booking = require('../Models/Bookers');
+const Service = require('../Models/Services');
 const errorResponse = require('../utils/errorResponse');
 
 // Create a new booking
-exports.createBooking = async (req, res,next) => {
+exports.createBooking = async (req, res, next) => {
   try {
-    console.log(req.body);
-    const { providerId, date, timeSlot, description,service } = req.body;
+    const {
+      providerId,
+      serviceId,
+      date,
+      timeSlot,
+      description,
+      service,
+    } = req.body;
 
-    // Assuming user ID is available via auth middleware
     const user = req.user.id;
 
-    // Simple check: prevent double booking for same provider at same time
-    const existing = await Booking.findOne({ providerId, date, timeSlot });
-    if (existing) {
-      return next(new errorResponse('This time slot is already booked.',400));
-    }
+    if (!serviceId)
+      return next(new errorResponse("serviceId is required", 400));
 
-    const booking = await Booking.create({
-      user,
+    if (!providerId)
+      return next(new errorResponse("providerId is required", 400));
+
+    // Prevent duplicate booking
+    const existingBooking = await Booking.findOne({
       provider: providerId,
-      date, 
-      time:timeSlot,
-      service,
-      description
+      date,
+      time: timeSlot,
+      status: { $ne: "cancelled" },
     });
 
-    res.status(201).json({ success: true, data: booking });
+    if (existingBooking) {
+      return next(
+        new errorResponse("This time slot is already booked.", 400)
+      );
+    }
+
+    // Reduce capacity only if capacity > 0
+    const updatedService = await Service.findOneAndUpdate(
+      {
+        _id: serviceId,
+        capacity: { $gt: 0 },
+      },
+      {
+        $inc: {
+          capacity: -1,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedService) {
+      return next(
+        new errorResponse("This service is fully booked.", 400)
+      );
+    }
+
+    // Automatically disable if capacity reaches zero
+    if (updatedService.capacity === 0 && updatedService.available) {
+      updatedService.available = false;
+      await updatedService.save();
+    }
+
+    try {
+      const booking = await Booking.create({
+        user,
+        provider: providerId,
+        service: serviceId,
+        serviceCategory: service,
+        date,
+        time: timeSlot,
+        description,
+        status: "pending",
+      });
+
+      return res.status(201).json({
+        success: true,
+        data: booking,
+      });
+    } catch (bookingError) {
+      // Rollback capacity
+      await Service.findByIdAndUpdate(serviceId, {
+        $inc: {
+          capacity: 1,
+        },
+      });
+
+      throw bookingError;
+    }
   } catch (err) {
-    console.log(err);
-    next(new errorResponse('server Errror',500));
+    console.error(err);
+    next(new errorResponse("Server error", 500));
   }
 };
 
-// Optional: Get all bookings for a user
-exports.getMe = async (req, res,next) => {
+// Get all bookings for a user
+exports.getMe = async (req, res, next) => {
   try {
     const user = req.user.id;
-    const bookings = await Booking.find({ user })
-    .populate('provider', 'name rating');
+    const bookings = await Booking.find({ user }).populate('provider', 'name rating');
     res.status(200).json({ success: true, data: bookings });
   } catch (err) {
-    next(new errorResponse('server Error!', 500));
-    console.log(err);
+    console.error(err);
+    next(new errorResponse('Server error', 500));
   }
 };
+
 // Cancel a booking
 exports.cancelBooking = async (req, res, next) => {
   try {
     const booking = await Booking.findById(req.params.id);
 
-    if (!booking) {
-      return next(new errorResponse('Booking not found', 404));
-    }
+    if (!booking)
+      return next(new errorResponse("Booking not found", 404));
 
-    // Make sure the logged-in user owns this booking
     if (booking.user.toString() !== req.user.id) {
-      return next(new errorResponse('Not authorized to cancel this booking', 403));
+      return next(
+        new errorResponse(
+          "Not authorized to cancel this booking",
+          403
+        )
+      );
     }
 
-    // Optional: prevent cancelling already-cancelled bookings
-    if (booking.status === 'cancelled') {
-      return next(new errorResponse('Booking is already cancelled', 400));
+    if (booking.status === "cancelled") {
+      return next(
+        new errorResponse("Booking already cancelled", 400)
+      );
     }
 
-    booking.status = 'cancelled';
+    booking.status = "cancelled";
     await booking.save();
 
-    res.status(200).json({ success: true, message: 'Booking cancelled', data: booking });
+    const service = await Service.findByIdAndUpdate(
+      booking.service,
+      {
+        $inc: {
+          capacity: 1,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (service && !service.available) {
+      service.available = true;
+      await service.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Booking cancelled successfully.",
+      data: booking,
+    });
   } catch (err) {
-    next(new errorResponse('Server error', 500));
+    console.error(err);
+    next(new errorResponse("Server error", 500));
   }
 };
 // Get a single booking
@@ -77,17 +167,40 @@ exports.getSingleBooking = async (req, res, next) => {
   try {
     const booking = await Booking.findById(req.params.id).populate('provider', 'name rating');
 
-    if (!booking) {
-      return next(new errorResponse('Booking not found', 404));
-    }
+    if (!booking)
+      return next(new errorResponse("Booking not found", 404));
 
-    // Make sure the logged-in user owns this booking
     if (booking.user.toString() !== req.user.id) {
-      return next(new errorResponse('Not authorized to view this booking', 403));
+      return next(
+        new errorResponse("Not authorized to view this booking", 403)
+      );
     }
 
-    res.status(200).json({ success: true, data: booking });
+    res.status(200).json({
+      success: true,
+      data: booking,
+    });
   } catch (err) {
+    console.error(err);
+    next(new errorResponse("Server error", 500));
+  }
+};
+// Add this to controllers/booker.js (alongside your other exports)
+
+// Get all bookings — admin only
+exports.getAllBookings = async (req, res, next) => {
+  try {
+    const bookings = await Booking.find()
+      .populate('user', 'name email')
+      .populate('provider', 'name rating')
+      .populate('service', 'name price');
+
+    res.status(200).json({
+      success: true,
+      data: bookings,
+    });
+  } catch (err) {
+    console.error(err);
     next(new errorResponse('Server error', 500));
   }
 };

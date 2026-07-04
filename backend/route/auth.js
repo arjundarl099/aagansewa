@@ -9,7 +9,7 @@ router.
 route('/register')
 .post(registerUser);
 router.
-route('/Me')
+route('/me')
 .get(protect,getMe);
 
 module.exports=router;

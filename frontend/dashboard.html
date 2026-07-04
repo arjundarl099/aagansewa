@@ -30,15 +30,21 @@
       50%       { box-shadow: 0 0 24px rgba(230,57,70,.9); }
     }
 
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.95) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-box { animation: modalIn .25s ease both; }
+
     .status-pending    { background:#fef9c3; color:#854d0e; }
     .status-confirmed  { background:#dcfce7; color:#14532d; }
     .status-cancelled  { background:#fee2e2; color:#991b1b; }
     .status-completed  { background:#e0f2fe; color:#075985; }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="">
 
-  <!-- Navbar -->
+  <!-- ═══════════════════════════════════════════════════════ NAVBAR -->
   <nav style="background:rgba(26,77,46,0.97);border-bottom:2px solid #3daa64;"
        class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-16 shadow-lg">
     <a href="index.html" class="flex items-center gap-3 no-underline">
@@ -60,17 +66,34 @@
     </div>
   </nav>
 
-  <main class="pt-20 pb-12 px-4 max-w-6xl mx-auto">
+  <main class="pt-20 pb-12 px-4 max-w-6xl ">
 
     <!-- Welcome Banner -->
     <div class="fade-up rounded-2xl p-6 mb-8 text-white relative overflow-hidden"
          style="background:linear-gradient(135deg,#15803d,#14532d);">
       <div class="absolute inset-0" style="background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.07),transparent 60%)"></div>
-      <h1 class="text-2xl font-extrabold mb-1">Welcome back 👋</h1>
+      <h1 class="text-2xl font-extrabold mb-1 text-black">Welcome back 👋</h1>
       <p class="opacity-80 text-sm">Manage your bookings and explore services below.</p>
     </div>
 
-    <!-- ── AVAILABLE SERVICES ── -->
+    <!-- ═══════════════════════════════════════════ ADMIN PANEL (hidden by default) -->
+    <section id="admin-section" class="hidden mb-10 fade-up" style="animation-delay:.05s">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold" style="color:#14532d;">
+          <i class="fa-solid fa-users-gear mr-2"></i>User Management
+        </h2>
+        <!-- Optional: add a "Create User" button here if your backend supports it -->
+      </div>
+
+      <div id="users-container">
+        <div class="text-center py-12 text-gray-400">
+          <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 block"></i>
+          Loading users…
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ AVAILABLE SERVICES -->
     <section class="mb-10 fade-up" style="animation-delay:.1s">
       <h2 class="text-xl font-bold mb-4" style="color:#14532d;">
         <i class="fa-solid fa-grid-2 mr-2"></i>Available Services
@@ -128,13 +151,12 @@
       </div>
     </section>
 
-    <!-- ── MY BOOKINGS ── -->
+    <!-- ═══════════════════════════════════════════════════════ MY BOOKINGS -->
     <section class="fade-up" style="animation-delay:.2s">
       <h2 class="text-xl font-bold mb-4" style="color:#14532d;">
         <i class="fa-solid fa-calendar-check mr-2"></i>My Bookings
       </h2>
       <div id="bookings-container">
-        <!-- filled by JS -->
         <div class="text-center py-12 text-gray-400">
           <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 block"></i>
           Loading your bookings...
@@ -147,6 +169,55 @@
   <footer class="text-center text-sm text-gray-400 py-6">
     © 2025 Aagan Sewa · Making life easier, one service at a time.
   </footer>
+
+  <!-- ═══════════════════════════════════════════ EDIT USER MODAL (hidden by default) -->
+  <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center"
+       style="background:rgba(0,0,0,0.45);">
+    <div class="modal-box bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+      <h3 class="text-lg font-bold mb-5" style="color:#14532d;">
+        <i class="fa-solid fa-user-pen mr-2"></i>Edit User
+      </h3>
+      <input type="hidden" id="edit-user-id" />
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-1">Name</label>
+          <input id="edit-user-name" type="text" placeholder="Full name"
+            class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-300 transition" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-1">Email</label>
+          <input id="edit-user-email" type="email" placeholder="email@example.com"
+            class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-300 transition" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-600 mb-1">Role</label>
+          <select id="edit-user-role"
+            class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-300 transition bg-white">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button onclick="saveEditUser()"
+          class="flex-1 text-white font-semibold py-2.5 rounded-xl transition text-sm"
+          style="background:#16a34a;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+          <i class="fa-solid fa-floppy-disk mr-1"></i>Save Changes
+        </button>
+        <button onclick="closeEditModal()"
+          class="flex-1 border border-gray-200 text-gray-600 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition text-sm">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Close modal when clicking backdrop -->
+  <script>
+    document.getElementById('edit-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeEditModal();
+    });
+  </script>
 
   <script src="js/dashboard.js"></script>
 </body>
